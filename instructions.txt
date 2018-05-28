@@ -1,0 +1,92 @@
+Workstation: 
+
+sudo -i 
+
+subscription-manager attach --pool=`subscription-manager list --all --available --matches "*Extra Packages*" --pool-only`
+
+yum -y install ansible
+
+ansible --version
+
+vi /etc/ansible/hosts
+
+__________________________________________
+
+[web]
+servera.example.com
+
+[sql]
+serverb.example.com
+
+__________________________________________
+
+cd /root
+
+Password: redhat
+
+ssh-copy-id -i .ssh/open servera.example.com
+
+ssh-copy-id -i .ssh/open serverb.example.com
+
+ansible web -b -m yum -a "name=httpd state=present"
+
+ansible web -b -m service -a "name=httpd state=started"
+
+git clone https://github.com/himanshumps/ansible.git
+
+cd ansible
+
+ansible-playbook site.yml
+
+curl servera.example.com
+
+ssh tower.example.com
+
+subscription-manager attach --pool=`subscription-manager list --all --available --matches "*Extra Packages*" --pool-only`
+
+yum install -y wget
+
+wget http://www.opentlc.com/download/ansible-foundation-tower/ansible-tower-setup-latest.tar.gz
+
+tar -xvzf ansible-tower-setup-latest.tar.gz
+
+cd ansible-tower-setup-*
+
+vi inventory
+
+_____________________________________________________
+
+[primary]
+localhost ansible_connection=local
+
+[secondary]
+
+[database]
+
+[all:vars]
+admin_password='redhat'
+pg_password='redhat'
+rabbitmq_password='redhat'
+redis_password='redhat'
+
+pg_host=''
+pg_port=''
+
+pg_database='awx'
+pg_username='awx'
+
+______________________________________________________
+
+./setup.sh (takes about 15 minutes)
+
+chown -R awx:awx /var/log/tower/
+
+Open website: https://tower-GUID.rhpds.opentlc.com
+
+First you need to download a valid License file. (https://www.opentlc.com/download/ansible_foundations/license.txt)
+
+
+
+
+
+
